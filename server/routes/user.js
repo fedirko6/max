@@ -1,19 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const authMiddleware = require('../middleware/auth');
+const authMiddleware = require('../middleware/auth'); // твой middleware для проверки JWT
 
-// 👤 Профиль пользователя (по токену)
+// Получение профиля текущего пользователя по токену
 router.get('/profile', authMiddleware, async (req, res) => {
   try {
-    const user = await User.findById(req.userId).select('-password');
+    // req.userId устанавливается в authMiddleware после успешной проверки токена
+    const user = await User.findById(req.userId).select('-password'); // исключаем пароль из ответа
     if (!user) {
       return res.status(404).json({ message: 'Пользователь не найден' });
     }
-
     res.json({ user });
-  } catch (err) {
-    console.error('Ошибка профиля:', err);
+  } catch (error) {
+    console.error('Ошибка при получении профиля:', error);
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 });
