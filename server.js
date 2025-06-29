@@ -7,9 +7,9 @@ const cors = require('cors');
 // ⬇️ Загрузка переменных окружения из .env — сразу после импорта
 dotenv.config();
 
-// 📦 Импорт маршрутов — после dotenv
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
+// 📦 Импорт маршрутов — правильный путь к ним
+const authRoutes = require('./server/routes/auth');
+const userRoutes = require('./server/routes/user');
 
 const app = express();
 
@@ -30,8 +30,8 @@ mongoose.connect(process.env.MONGO_URI)
 
     // Запуск сервера только после успешного подключения к БД
     app.listen(process.env.PORT || 5000, () => {
-  console.log(`🚀 Сервер запущен на порту ${process.env.PORT || 5000}`);
-});
+      console.log(`🚀 Сервер запущен на порту ${process.env.PORT || 5000}`);
+    });
   })
   .catch((err) => {
     console.error('❌ Ошибка подключения к MongoDB:', err);
