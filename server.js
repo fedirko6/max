@@ -16,11 +16,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Тестовый маршрут для проверки сервера (можно убрать позже)
-app.get('/api/test', (req, res) => {
-  res.send('Сервер работает!');
-});
-
 // Подключаем роуты API
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
@@ -28,12 +23,12 @@ app.use('/api/user', userRoutes);
 // Отдаём статику React-приложения из папки client/build
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-// Для всех путей, кроме /api, отдаём React (SPA)
+// Все маршруты, не начинающиеся с /api, — отдаём index.html
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api')) {
     return res.status(404).send('API route not found');
   }
-  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
 // Подключение к MongoDB и запуск сервера
