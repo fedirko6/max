@@ -14,21 +14,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 📦 Подключаем API-роуты
+// API роуты
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 
-// 📁 Отдаём статику из React-приложения
-app.use(express.static(path.join(__dirname, 'client', 'build')));
-// Отдаём статику React-приложения
+// Отдаём статику React
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 
-// Для всех остальных маршрутов, кроме /api, отдаём index.html
+// Отдаём index.html для всех не API запросов
 app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
-// 🔌 Подключение к MongoDB и запуск сервера
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ MongoDB подключён');
