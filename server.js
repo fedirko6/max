@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'client', 'build')));
 // Для всех путей, кроме /api, отдаём index.html
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api')) {
-    return res.status(404).send('API not found');
+    return res.status(404).send('Not found');
   }
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
