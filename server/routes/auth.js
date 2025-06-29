@@ -1,3 +1,10 @@
+const express = require('express');
+const router = express.Router();
+
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+
 router.post('/register', async (req, res) => {
   try {
     console.log('Регистрация - получены данные:', req.body);
@@ -51,3 +58,5 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 });
+
+module.exports = router;
