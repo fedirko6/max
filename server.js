@@ -28,11 +28,6 @@ app.use('/api/user', userRoutes);
 // Отдаём статику React-приложения из папки client/build
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-// Все остальные маршруты отдаём React (SPA)
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-});
-
 // Подключение к MongoDB и запуск сервера
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
