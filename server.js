@@ -14,20 +14,22 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// 📦 Подключаем API-роуты
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 
-// Статическая папка React
+// 📁 Отдаём статику из React-приложения
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 
-// Для всех путей, кроме /api, отдаём index.html
+// 🧭 Обработка всех остальных маршрутов, кроме API
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api')) {
-    return res.status(404).send('Not found');
+    return res.status(404).send('API not found');
   }
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
+// 🔌 Подключение к MongoDB и запуск сервера
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ MongoDB подключён');
