@@ -20,12 +20,11 @@ app.use('/api/user', userRoutes);
 
 // 📁 Отдаём статику из React-приложения
 app.use(express.static(path.join(__dirname, 'client', 'build')));
+// Отдаём статику React-приложения
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
-// 🧭 Обработка всех остальных маршрутов, кроме API
-app.get('*', (req, res) => {
-  if (req.path.startsWith('/api')) {
-    return res.status(404).send('API not found');
-  }
+// Для всех остальных маршрутов, кроме /api, отдаём index.html
+app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
