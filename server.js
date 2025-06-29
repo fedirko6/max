@@ -1,38 +1,40 @@
-// 📦 Импорт модулей — сначала
+// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 
-// ⬇️ Загрузка переменных окружения из .env — сразу после импорта
+// Загружаем переменные окружения из .env
 dotenv.config();
 
-// 📦 Импорт маршрутов — правильный путь к ним
 const authRoutes = require('./server/routes/auth');
 const userRoutes = require('./server/routes/user');
 
 const app = express();
 
-// 🔐 Middlewares — подключаем middleware после создания app
+// Middleware
 app.use(cors());
-app.use(express.json()); // чтобы сервер понимал JSON в запросах
+app.use(express.json());
 
-// 🛣 Роуты — подключаем роуты к app
+// Тестовый маршрут для проверки сервера
+app.get('/', (req, res) => {
+  res.send('Сервер работает!');
+});
+
+// Подключаем роуты
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 
-console.log('Запуск server.js — начало');
-
-// 🌍 Подключение к MongoDB
+// Подключение к MongoDB и запуск сервера
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ MongoDB подключён');
 
-    // Запуск сервера только после успешного подключения к БД
-    app.listen(process.env.PORT || 5000, () => {
-      console.log(`🚀 Сервер запущен на порту ${process.env.PORT || 5000}`);
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log(`🚀 Сервер запущен на порту ${PORT}`);
     });
   })
-  .catch((err) => {
+  .catch(err => {
     console.error('❌ Ошибка подключения к MongoDB:', err);
   });
