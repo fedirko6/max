@@ -1,8 +1,8 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const path = require('path');
 
 // Загружаем переменные окружения из .env
 dotenv.config();
@@ -16,14 +16,22 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Тестовый маршрут для проверки сервера
-app.get('/', (req, res) => {
+// Тестовый маршрут для проверки сервера (можно убрать позже)
+app.get('/api/test', (req, res) => {
   res.send('Сервер работает!');
 });
 
-// Подключаем роуты
+// Подключаем роуты API
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+
+// Отдаём статику React-приложения из папки client/build
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+// Все остальные маршруты отдаём React (SPA)
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
 
 // Подключение к MongoDB и запуск сервера
 mongoose.connect(process.env.MONGO_URI)
